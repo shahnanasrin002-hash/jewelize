@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enter OTP</title>
+  <link rel="stylesheet" href="1.loginpagestyle.css" />
+</head>
+<body>
+
+  <!-- Logo -->
+  <div class="logo">
+    <img src="images/logo.png" alt="Jewelize Logo">
+  </div>
+
+  <!-- OTP Container -->
+  <div class="container">
+    <h2>Enter Code</h2>
+    <p>Code sent to <span id="userContactDisplay">your contact</span></p>
+    <input type="text" placeholder="6-digit code" id="otpInput" maxlength="6" />
+    <button id="submitBtn">Submit</button>
+  </div>
+
+  <script>
+    // Get user contact from localStorage
+    const userContact = localStorage.getItem("userContact");
+
+    // If no contact found, redirect back to login
+    if (!userContact) {
+      alert("No contact found. Please sign in again.");
+      window.location.href = "1.loginpage.html";
+    } else {
+      document.getElementById("userContactDisplay").textContent = userContact;
+    }
+
+    // Handle OTP verification
+    document.getElementById("submitBtn").addEventListener("click", async () => {
+      const otp = document.getElementById("otpInput").value.trim();
+      const button = document.getElementById("submitBtn");
+
+      // Validate 6-digit OTP
+      if (!/^\d{6}$/.test(otp)) {
+        alert("Please enter a valid 6-digit OTP.");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Verifying...";
+
+      try {
+        // ✅ Use 127.0.0.1 instead of localhost
+        const res = await fetch("/verify-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contact: userContact, otp }),
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          alert("OTP verified successfully! 🎉");
+          localStorage.setItem("token", data.token);
+          // Redirect to homepage
+          window.location.href = "index.html";
+        } else {
+          alert(data.message || "Invalid OTP. Please try again.");
+        }
+      } catch (err) {
+        console.error("Error verifying OTP:", err);
+        alert("Something went wrong. Please try again later.");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Submit";
+      }
+    });
+  </script>
+
+</body>
+</html>

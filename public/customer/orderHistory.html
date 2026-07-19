@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order History | Jewelize</title>
+  <link rel="stylesheet" href="customerstyle.css">
+  <link rel="stylesheet" href="wishlist_cart.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../images/logo.png" alt="Jewelize Logo">
+      </a>
+    </div>
+
+    <nav class="main-nav">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="viewProduct.html?category=bracelets">Bracelets</a></li>
+        <li><a href="viewProduct.html?category=Cuff Bracelets">Cuff Bracelets</a></li>
+        <li><a href="viewProduct.html?category=earrings">Earrings</a></li>
+        <li><a href="viewProduct.html?category=necklaces">Necklaces</a></li>
+        <li><a href="viewProduct.html?category=rings">Rings</a></li>
+      </ul>
+    </nav>
+    <div class="header-icons">
+      <!-- Search toggle -->
+      <i class="fa-solid fa-magnifying-glass" onclick="toggleSearch()" style="cursor: pointer;"></i>
+      <a href="wishlist.html"><i class="fa-solid fa-heart"></i></a>
+      <!-- go up one folder to access login page -->
+      <a href="customerDashboard.html"><i class="fa-solid fa-user" style="color: #d1b4c3;"></i></a>
+      <a href="cart.html" style="position: relative;"><i class="fa-solid fa-bag-shopping"></i><span id="cart-count" style="background: #d4af37; color: white; border-radius: 50%; padding: 2px 5px; font-size: 10px; position: absolute; top: -8px; right: -8px; font-weight: bold; display: none;">0</span></a>
+    </div>
+    
+    <!-- Hidden search bar -->
+    <div id="search-bar-container" style="display: none; position: absolute; right: 70px; top: 75px; background: white; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); gap: 5px; z-index: 100;">
+      <input type="text" id="search-input" placeholder="Search products..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+      <button onclick="performSearch()" style="padding: 8px 15px; background: #d1b4c3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Go</button>
+    </div>
+  </header>
+
+<section class="orders-page">
+  <h2>Your Orders 📦</h2>
+  <div class="order-list" id="order-list">
+    <p>Loading your orders...</p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Jewelize | Anti-Tarnish Everyday Jewelry</p>
+</footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    async function fetchOrders() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = "../1.loginpage.html";
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/orders', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        
+        const orderList = document.getElementById('order-list');
+        
+        if (data.success) {
+          if (data.orders.length === 0) {
+            orderList.innerHTML = "<p>You haven't placed any orders yet. Time to shop! ✨</p>";
+            return;
+          }
+          
+          orderList.innerHTML = "";
+          data.orders.forEach(order => {
+            const date = new Date(order.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            
+            // Map the items to a readable string
+            const itemsList = order.items.map(item => {
+              // If product was deleted, item.productId might be null
+              const productName = item.productId ? item.productId.name : "Unknown Product";
+              return `${productName} (Qty: ${item.quantity})`;
+            }).join('<br>');
+
+            let statusClass = "processing";
+            if (order.status.toLowerCase() === "delivered") statusClass = "delivered";
+            if (order.status.toLowerCase() === "shipped") statusClass = "shipped";
+            if (order.status.toLowerCase() === "cancelled") statusClass = "cancelled";
+            
+            const html = `
+              <div class="order-item" style="border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;">
+                  <h3 style="margin: 0; font-size: 1.1em; color: #444;">Order #${order._id.substring(order._id.length - 6).toUpperCase()}</h3>
+                  <span style="font-size: 0.9em; color: #777;">${date}</span>
+                </div>
+                <p style="margin: 5px 0;"><strong>Products:</strong><br><span style="color: #666; font-size: 0.95em;">${itemsList}</span></p>
+                <p style="margin: 5px 0;"><strong>Total:</strong> Rs. ${order.totalAmount.toFixed(2)}</p>
+                <p style="margin: 5px 0;"><strong>Status:</strong> <span style="font-weight: 600; text-transform: capitalize; color: ${statusClass === 'delivered' ? 'green' : '#d4af37'};">${order.status}</span></p>
+              </div>
+            `;
+            orderList.innerHTML += html;
+          });
+        } else {
+          orderList.innerHTML = "<p>Failed to load orders.</p>";
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById('order-list').innerHTML = "<p>Something went wrong.</p>";
+      }
+    }
+    
+    fetchOrders();
+  </script>
+</body>
+</html>

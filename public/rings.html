@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rings - Jewelize</title>
+  <link rel="stylesheet" href="customer/customerstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <a href="index.html">
+        <img src="images/logo.png" alt="Jewelize Logo" onerror="this.src='https://placehold.co/150x50?text=Jewelize'">
+      </a>
+    </div>
+
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="bracelets.html">Bracelets</a></li>
+        <li><a href="cuffs.html">Cuff Bracelets</a></li>
+        <li><a href="earrings.html">Earrings</a></li>
+        <li><a href="necklaces.html">Necklaces</a></li>
+        <li><a href="rings.html" style="font-weight: bold;">Rings</a></li>
+      </ul>
+    </nav>
+    <div class="header-icons">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <a href="#"><i class="fa-solid fa-heart"></i></a>
+      <a href="1.loginpage.html"><i class="fa-solid fa-user"></i></a>
+      <a href="customer/cart.html" style="position: relative;">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span id="cart-count" style="background: #d4af37; color: white; border-radius: 50%; padding: 2px 5px; font-size: 10px; position: absolute; top: -8px; right: -8px; font-weight: bold; display: none;">0</span>
+      </a>
+    </div>
+  </header>
+
+  <section class="best-sellers-section" style="padding-top: 150px;">
+    <div class="section-header">
+      <h2 class="section-title">Rings Collection</h2>
+      <p class="section-subtitle">Elegant rings for everyday wear.</p>
+    </div>
+
+    <div class="product-grid" id="product-grid-container">
+      <!-- Products will load here dynamically -->
+    </div>
+
+    </section>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>SHOP NOW</h3>
+        <ul>
+          <li><a href="#">All Collections</a></li>
+          <li><a href="necklaces.html">Necklaces</a></li>
+          <li><a href="earrings.html">Earrings</a></li>
+          <li><a href="rings.html" style="font-weight: bold;">Rings</a></li>
+          <li><a href="bracelets.html">Bracelets</a></li>
+          <li><a href="cuffs.html">Cuff Bracelets</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>POLICY</h3>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Jewelize</h3>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-twitter"></i></a>
+        </div>
+        <p>Customer Support</p>
+        <p>+91 9526416390</p>
+        <p>contact@jewelize.com</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    loadCategoryProducts('Rings');
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Product - Jewelize Admin</title>
+  <link rel="stylesheet" href="adminstyle.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="adminHomepage.html">Jewelize Admin</a>
+    </div>
+  </header>
+
+  <div class="form-container">
+    <h2>Edit Product</h2>
+    <form id="editProductForm">
+      <select required>
+        <option value="">Select Product</option>
+        <option value="p1">Bow Earring</option>
+        <option value="p2">Golden Leaf Ring</option>
+      </select>
+      <input type="text" placeholder="New Product Name">
+      <input type="number" placeholder="New Price (₹)">
+      <input type="number" placeholder="New Stock Quantity">
+      <button type="submit">Update Product</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("editProductForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("✅ Product updated successfully!");
+      window.location.href = "adminHomepage.html";
+    });
+  </script>
+</body>
+</html>

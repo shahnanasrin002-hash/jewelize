@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Category - Jewelize Admin</title>
+  <link rel="stylesheet" href="adminstyle.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="adminHomepage.html">Jewelize Admin</a>
+    </div>
+  </header>
+
+  <div class="form-container">
+    <h2>Add New Category</h2>
+    <form id="addCategoryForm">
+      <input type="text" placeholder="Category Name" required>
+      <textarea placeholder="Category Description"></textarea>
+      <button type="submit">Add Category</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("addCategoryForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("✅ Category added successfully!");
+      window.location.href = "adminHomepage.html";
+    });
+  </script>
+</body>
+</html>

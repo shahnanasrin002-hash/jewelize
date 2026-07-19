@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jewelize - Your Signature Shine</title>
+  <link rel="stylesheet" href="customerstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../images/logo.png" alt="Jewelize Logo">
+      </a>
+    </div>
+
+    <nav class="main-nav">
+      <ul>
+        <li><a href="../index.html" style="color: #d1b4c3; font-weight: bold;">Home</a></li>
+        <li><a href="viewProduct.html?category=bracelets">Bracelets</a></li>
+        <li><a href="viewProduct.html?category=Cuff Bracelets">Cuff Bracelets</a></li>
+        <li><a href="viewProduct.html?category=earrings">Earrings</a></li>
+        <li><a href="viewProduct.html?category=necklaces">Necklaces</a></li>
+        <li><a href="viewProduct.html?category=rings">Rings</a></li>
+      </ul>
+    </nav>
+    <div class="header-icons">
+      <!-- Search toggle -->
+      <i class="fa-solid fa-magnifying-glass" onclick="toggleSearch()" style="cursor: pointer;"></i>
+      <a href="wishlist.html"><i class="fa-solid fa-heart"></i></a>
+      <!-- go up one folder to access login page -->
+      <a href="customerDashboard.html"><i class="fa-solid fa-user"></i></a>
+      <a href="cart.html" style="position: relative;"><i class="fa-solid fa-bag-shopping"></i><span id="cart-count" style="background: #d4af37; color: white; border-radius: 50%; padding: 2px 5px; font-size: 10px; position: absolute; top: -8px; right: -8px; font-weight: bold; display: none;">0</span></a>
+    </div>
+    
+    <!-- Hidden search bar -->
+    <div id="search-bar-container" style="display: none; position: absolute; right: 70px; top: 75px; background: white; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); gap: 5px; z-index: 100;">
+      <input type="text" id="search-input" placeholder="Search products..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+      <button onclick="performSearch()" style="padding: 8px 15px; background: #d1b4c3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Go</button>
+    </div>
+  </header>
+
+  <section class="hero-banner">
+    <div class="hero-content">
+      <h1>Your Everyday Collection</h1>
+      <a href="#" class="cta-button">SHOP NOW</a>
+    </div>
+  </section>
+
+  <section class="product-categories">
+    <div class="category-item">
+      <img src="../images/chain.jpeg" alt="Necklaces">
+      <h3>Necklaces</h3>
+    </div>
+    <div class="category-item">
+      <img src="../images/earing.jpeg" alt="Earrings">
+      <h3>Earrings</h3>
+    </div>
+    <div class="category-item">
+      <img src="../images/ring.jpeg" alt="Rings">
+      <h3>Rings</h3>
+    </div>
+    <div class="category-item">
+      <img src="../images/bracelet.jpeg" alt="Bracelets">
+      <h3>Bracelets</h3>
+    </div>
+    <div class="category-item">
+      <img src="../images/cuff.jpeg" alt="Cuff Bracelets">
+      <h3>Cuff Bracelets</h3>
+    </div>
+  </section>
+
+  <section class="best-sellers-section">
+    <div class="section-header">
+      <h2 class="section-title">Best Sellers</h2>
+      <p class="section-subtitle">The pieces that stole hearts and sold out - again and again.</p>
+    </div>
+
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-image-container">
+          <img src="../images/bow.jpeg" alt="Minimalist Earrings">
+        </div>
+        <h3 class="product-name">Bow Earring</h3>
+        <p class="product-price">Rs. 180.00</p>
+        <button class="add-to-cart-btn">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <div class="product-image-container">
+          <img src="../images/golden leaf.jpeg" alt="Dangling Earrings">
+        </div>
+        <h3 class="product-name">Golden Leaf Ring</h3>
+        <p class="product-price">Rs. 165.00</p>
+        <button class="add-to-cart-btn">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <div class="product-image-container">
+          <img src="../images/knot.jpeg" alt="Chain Bracelet">
+        </div>
+        <h3 class="product-name">Knot Cuff</h3>
+        <p class="product-price">Rs. 285.00</p>
+        <button class="add-to-cart-btn">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <div class="product-image-container">
+          <img src="../images/luvdrop.jpeg" alt="Dainty Necklace">
+        </div>
+        <h3 class="product-name">Luvdrop Necklace</h3>
+        <p class="product-price">Rs. 210.00</p>
+        <button class="add-to-cart-btn">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <div class="product-image-container">
+          <img src="../images/luvloop.jpeg" alt="Dainty Necklace">
+        </div>
+        <h3 class="product-name">Luvloop Necklace</h3>
+        <p class="product-price">Rs. 210.00</p>
+        <button class="add-to-cart-btn">Add to Cart</button>
+      </div>
+    </div>
+
+    <a href="#" class="view-all-btn">View All</a>
+  </section>
+  
+  <section class="usp-section">
+    <div class="usp-item">
+      <i class="fa-solid fa-star"></i>
+      <p>Dailywear</p>
+    </div>
+    <div class="usp-item">
+      <i class="fa-solid fa-shield-halved"></i>
+      <p>Anti-Tarnish</p>
+    </div>
+    <div class="usp-item">
+      <i class="fa-solid fa-water"></i>
+      <p>Waterproof</p>
+    </div>
+  </section>
+
+  <section class="about-section">
+    <div class="about-content">
+      <h2>Your Signature Shine Starts Here ✨</h2>
+      <p>Jewelize is more than just jewelry; it's an expression of yourself. We craft pieces that are not only stylish but also durable, designed to withstand your daily life. Our collection, from subtle everyday elegance to bold statement pieces, is made with high-quality, anti-tarnish, and waterproof materials, ensuring your shine never fades. Discover jewelry that is as resilient and unique as you are. Join the Jewelize family and find your perfect everyday piece.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>SHOP NOW</h3>
+        <ul>
+          <li><a href="#">All Collections</a></li>
+          <li><a href="#">Necklaces</a></li>
+          <li><a href="#">Earrings</a></li>
+          <li><a href="#">Rings</a></li>
+          <li><a href="#">Bracelets</a></li>
+          <li><a href="#">Cuff Bracelets</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>POLICY</h3>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Jewelize</h3>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-twitter"></i></a>
+        </div>
+        <p>Customer Support</p>
+        <p>+91 9526416390</p>
+        <p>contact@jewelize.com</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

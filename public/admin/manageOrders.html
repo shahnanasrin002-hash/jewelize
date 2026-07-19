@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Orders - Jewelize Admin</title>
+  <link rel="stylesheet" href="adminstyle.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="adminHomepage.html">Jewelize Admin</a>
+    </div>
+  </header>
+
+  <div class="table-container">
+    <h2>Manage Orders</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Product</th>
+          <th>Status</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>#1001</td>
+          <td>Shahna</td>
+          <td>Bow Earring</td>
+          <td>Pending</td>
+          <td>
+            <select>
+              <option>Pending</option>
+              <option>Shipped</option>
+              <option>Delivered</option>
+              <option>Cancelled</option>
+            </select>
+            <button>Update</button>
+          </td>
+        </tr>
+        <tr>
+          <td>#1002</td>
+          <td>Nasrin</td>
+          <td>Golden Leaf Ring</td>
+          <td>Shipped</td>
+          <td>
+            <select>
+              <option>Pending</option>
+              <option selected>Shipped</option>
+              <option>Delivered</option>
+              <option>Cancelled</option>
+            </select>
+            <button>Update</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        alert("✅ Order status updated!");
+      });
+    });
+  </script>
+</body>
+</html>

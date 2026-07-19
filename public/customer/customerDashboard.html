@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account - Jewelize</title>
+  <link rel="stylesheet" href="customerstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    /* Extra dashboard styling */
+    body {
+      background-color: #faf9f8;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+
+    /* Removed header inline styling to use unified header */
+
+    .dashboard-container {
+      max-width: 1000px;
+      margin: 50px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      padding: 0 20px;
+    }
+
+    .dashboard-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 25px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+
+    .dashboard-card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .dashboard-card p {
+      color: #555;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .dashboard-card a {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      background: #222;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    .dashboard-card a:hover {
+      background: #444;
+    }
+
+    button {
+      background: #d4af37;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background: #b8912f;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../images/logo.png" alt="Jewelize Logo">
+      </a>
+    </div>
+
+    <nav class="main-nav">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="viewProduct.html?category=bracelets">Bracelets</a></li>
+        <li><a href="viewProduct.html?category=Cuff Bracelets">Cuff Bracelets</a></li>
+        <li><a href="viewProduct.html?category=earrings">Earrings</a></li>
+        <li><a href="viewProduct.html?category=necklaces">Necklaces</a></li>
+        <li><a href="viewProduct.html?category=rings">Rings</a></li>
+      </ul>
+    </nav>
+    <div class="header-icons">
+      <!-- Search toggle -->
+      <i class="fa-solid fa-magnifying-glass" onclick="toggleSearch()" style="cursor: pointer;"></i>
+      <a href="wishlist.html"><i class="fa-solid fa-heart"></i></a>
+      <!-- go up one folder to access login page -->
+      <a href="customerDashboard.html"><i class="fa-solid fa-user" style="color: #d1b4c3;"></i></a>
+      <a href="cart.html" style="position: relative;"><i class="fa-solid fa-bag-shopping"></i><span id="cart-count" style="background: #d4af37; color: white; border-radius: 50%; padding: 2px 5px; font-size: 10px; position: absolute; top: -8px; right: -8px; font-weight: bold; display: none;">0</span></a>
+    </div>
+    
+    <!-- Hidden search bar -->
+    <div id="search-bar-container" style="display: none; position: absolute; right: 70px; top: 75px; background: white; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); gap: 5px; z-index: 100;">
+      <input type="text" id="search-input" placeholder="Search products..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+      <button onclick="performSearch()" style="padding: 8px 15px; background: #d1b4c3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Go</button>
+    </div>
+  </header>
+  
+  <!-- Added a small title to replace the old header text -->
+  <h2 style="text-align: center; margin-top: 30px;">My Account</h2>
+
+  <main class="dashboard-container">
+    <div class="dashboard-card">
+      <h3>👤 Profile</h3>
+      <p><strong>Contact:</strong> <span id="userContact"></span></p>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>🛍 Orders</h3>
+      <p>Check your order history</p>
+      <a href="orderHistory.html">View Orders</a>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>❤️ Wishlist</h3>
+      <p>See your saved jewelry pieces</p>
+      <a href="wishlist.html">Go to Wishlist</a>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>🛒 Cart</h3>
+      <p>View or edit items in your cart</p>
+      <a href="cart.html">Go to Cart</a>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>🚪 Logout</h3>
+      <p>End your session securely</p>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </main>
+
+  <script>
+    // Display user contact from localStorage
+    const userContact = localStorage.getItem("userContact");
+    document.getElementById("userContact").textContent = userContact || "Not available";
+
+    // Logout clears local storage and returns to login
+    function logout() {
+      localStorage.removeItem("userContact");
+      localStorage.removeItem("token");
+      localStorage.removeItem("jewelize_cart");
+      localStorage.removeItem("jewelize_wishlist");
+      alert("Logged out successfully!");
+      window.location.href = "../1.loginpage.html";
+    }
+  </script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Management - Jewelize</title>
+  <link rel="stylesheet" href="../customer/customerstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body { background-color: #fafafa; }
+    .inventory-section { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+    .inventory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    
+    .btn-back { background: transparent; color: #444; border: 1px solid #ccc; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; text-decoration: none; display: inline-block; }
+    .btn-back:hover { background: #eee; }
+    
+    .btn-add { background: #d1b4c3; color: #fff; padding: 10px 24px; border: none; cursor: pointer; border-radius: 25px; font-weight: 600; transition: all 0.3s ease; }
+    .btn-add:hover { background: #b38e9d; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    
+    .btn-edit { background: #d1b4c3; color: white; border: none; padding: 6px 16px; cursor: pointer; border-radius: 20px; font-weight: 500; transition: all 0.3s ease; margin-right: 8px; }
+    .btn-edit:hover { background: #b38e9d; transform: translateY(-2px); }
+
+    .btn-delete { background: transparent; color: #333; border: 1px solid #333; padding: 5px 15px; cursor: pointer; border-radius: 20px; font-weight: 500; transition: all 0.3s ease; }
+    .btn-delete:hover { background: #333; color: white; transform: translateY(-2px); }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background-color: #f8f9fa; font-weight: 600; color: #333; }
+    tr:hover { background-color: #f5f5f5; }
+    
+    .product-img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+    
+    /* Modal Styles */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
+    .modal-content { background: white; padding: 30px; border-radius: 8px; width: 400px; max-width: 90%; max-height: 90vh; overflow-y: auto;}
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;}
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .btn-cancel { background: #95a5a6; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; }
+    
+    .low-stock { color: #e74c3c; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="adminHomepage.html">
+        <img src="../images/logo.png" alt="Jewelize Logo" onerror="this.src='https://placehold.co/150x50?text=Jewelize'">
+      </a>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#" onclick="logout()" style="color: #e74c3c; font-weight: 600; cursor: pointer;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="inventory-section">
+    <div class="inventory-header">
+      <div style="display:flex; align-items:center; gap: 15px;">
+        <a href="adminHomepage.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back</a>
+        <h2>Inventory Management</h2>
+      </div>
+      <button class="btn-add" onclick="openAddModal()">+ Add New Product</button>
+    </div>
+
+    <table id="product-table">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price (Rs.)</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="product-list">
+        <!-- Products injected here -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Add/Edit Product Modal -->
+  <div id="productModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalTitle">Add New Product</h3>
+      <form id="productForm">
+        <input type="hidden" id="p_id">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="p_name" required>
+        </div>
+        <div class="form-group">
+          <label>Price (Rs.)</label>
+          <input type="number" id="p_price" required>
+        </div>
+        <div class="form-group">
+          <label>Stock Quantity</label>
+          <input type="number" id="p_stock" required value="0">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="p_category">
+            <option value="Bracelets">Bracelets</option>
+            <option value="Cuff Bracelets">Cuff Bracelets</option>
+            <option value="Earrings">Earrings</option>
+            <option value="Necklaces">Necklaces</option>
+            <option value="Rings">Rings</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Image Path</label>
+          <input type="text" id="p_image" placeholder="images/example.jpg" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="p_desc" placeholder="Short description" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-add">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) window.location.href = "../1.loginpage.html";
+
+    let allProducts = [];
+
+    async function loadProducts() {
+      try {
+        const res = await fetch("/api/products");
+        allProducts = await res.json();
+
+        console.log("These are my products:", allProducts);
+        
+        const tbody = document.getElementById("product-list");
+        tbody.innerHTML = "";
+        
+        allProducts.forEach((p, index) => {
+          const stockHtml = p.stock > 5 ? p.stock : `<span class="low-stock">${p.stock} (Low)</span>`;
+          tbody.innerHTML += `
+            <tr>
+              <td>${index + 1}</td>
+              <td><img src="../${p.imageUrl}" class="product-img" onerror="this.src='https://placehold.co/50x50'"></td>
+              <td>${p.name}</td>
+              <td>${p.category}</td>
+              <td>${p.price.toFixed(2)}</td>
+              <td>${stockHtml}</td>
+              <td>
+                <button class="btn-edit" onclick="openEditModal('${p._id}')">Edit</button>
+                <button class="btn-delete" onclick="deleteProduct('${p._id}')">Delete</button>
+              </td>
+            </tr>
+          `;
+        });
+      } catch (err) {
+        console.error("Failed to load products", err);
+      }
+    }
+
+    async function deleteProduct(id) {
+      if (!confirm("Are you sure you want to delete this product?")) return;
+      try {
+        const res = await fetch(`/api/admin/products/${id}`, {
+          method: "DELETE",
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) loadProducts();
+        else alert(data.message);
+      } catch (err) {
+        alert("Error deleting product");
+      }
+    }
+
+    document.getElementById("productForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const pId = document.getElementById("p_id").value;
+      const productData = {
+        name: document.getElementById("p_name").value,
+        price: document.getElementById("p_price").value,
+        stock: document.getElementById("p_stock").value,
+        category: document.getElementById("p_category").value,
+        imageUrl: document.getElementById("p_image").value,
+        description: document.getElementById("p_desc").value
+      };
+
+      try {
+        const url = pId ? `/api/admin/products/${pId}` : "/api/admin/products";
+        const method = pId ? "PUT" : "POST";
+
+        const res = await fetch(url, {
+          method: method,
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` 
+          },
+          body: JSON.stringify(productData)
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          closeModal();
+          loadProducts();
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert("Error saving product");
+      }
+    });
+
+    function openAddModal() {
+      document.getElementById("productModal").style.display = "flex";
+      document.getElementById("productForm").reset();
+      document.getElementById("modalTitle").innerText = "Add New Product";
+      document.getElementById("p_id").value = "";
+    }
+
+    function openEditModal(id) { 
+      document.getElementById("productModal").style.display = "flex";
+      document.getElementById("productForm").reset();
+      
+      document.getElementById("modalTitle").innerText = "Edit Product";
+      const product = allProducts.find(p => p._id === id);
+      if (product) {
+        document.getElementById("p_id").value = product._id;
+        document.getElementById("p_name").value = product.name;
+        document.getElementById("p_price").value = product.price;
+        document.getElementById("p_stock").value = product.stock || 0;
+        document.getElementById("p_category").value = product.category;
+        document.getElementById("p_image").value = product.imageUrl;
+        document.getElementById("p_desc").value = product.description;
+      }
+    }
+    
+    function closeModal() { document.getElementById("productModal").style.display = "none"; }
+    function logout() { localStorage.removeItem("token"); window.location.href = "../1.loginpage.html"; }
+
+    loadProducts();
+  </script>
+</body>
+</html>

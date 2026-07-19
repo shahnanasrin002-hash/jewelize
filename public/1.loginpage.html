@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in</title>
+  <link rel="stylesheet" href="1.loginpagestyle.css">
+</head>
+<body>
+
+  <!-- Logo -->
+  <div class="logo">
+    <img src="images/logo.png" alt="Jewelize Logo">
+  </div>
+
+  <!-- Login Container -->
+  <div class="container">
+    <h2>Sign in</h2>
+    <p>Enter email and we'll send you a verification code</p>
+    
+    <input type="text" id="contactInput" placeholder="Email">
+    <button id="continueBtn">Continue</button>
+    
+    <div class="footer">
+      <a href="#">Privacy policy</a>
+      <a href="#">Terms of service</a>
+    </div>
+  </div>
+
+  <script>
+    // Validate email
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    // Validate 10-digit phone number
+    function isValidPhone(phone) {
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(phone);
+    }
+
+    // Handle form submission
+    async function handleSubmit() {
+      const input = document.getElementById("contactInput").value.trim();
+      const button = document.getElementById("continueBtn");
+
+      if (input === "") {
+        alert("Please enter your email.");
+        return;
+      }
+      if (!isValidEmail(input)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Sending...";
+
+      // Added dynamic logic for unified login
+      try {
+        const res = await fetch("/check-identifier", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ identifier: input }),
+        });
+        const data = await res.json();
+        
+        if (res.ok) {
+          if (data.role === 'customer') {
+            // OTP flow
+            localStorage.setItem("userContact", input);
+            window.location.href = "2.otppage.html";
+          } else {
+            // Password flow for admin
+            const password = prompt(`Enter password for Admin dashboard:`);
+            if (!password) {
+               alert("Password is required to login.");
+               return;
+            }
+            
+            // Call login API
+            const loginRes = await fetch("/api/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ identifier: input, password, role: data.role }),
+            });
+            const loginData = await loginRes.json();
+            
+            if (loginData.success) {
+              localStorage.setItem("token", loginData.token);
+              window.location.href = "admin/adminHomepage.html";
+            } else {
+              alert(loginData.message || "Invalid credentials.");
+            }
+          }
+        } else {
+          alert(data.message || "Error checking identifier.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Something went wrong. Please try again later.");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Continue";
+      }
+    }
+
+    // Button click
+    document.getElementById("continueBtn").addEventListener("click", handleSubmit);
+
+    // Enter key support
+    document.getElementById("contactInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") handleSubmit();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Management - Jewelize</title>
+  <link rel="stylesheet" href="../customer/customerstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body { background-color: #fafafa; }
+    .orders-section { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+    .inventory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    
+    .btn-back { background: transparent; color: #444; border: 1px solid #ccc; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; text-decoration: none; display: inline-block; }
+    .btn-back:hover { background: #eee; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background-color: #f8f9fa; font-weight: 600; color: #333; }
+    tr:hover { background-color: #f5f5f5; }
+    
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="adminHomepage.html">
+        <img src="../images/logo.png" alt="Jewelize Logo" onerror="this.src='https://placehold.co/150x50?text=Jewelize'">
+      </a>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#" onclick="logout()" style="color: #e74c3c; font-weight: 600; cursor: pointer;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="orders-section">
+    <div class="inventory-header">
+      <div style="display:flex; align-items:center; gap: 15px;">
+        <a href="adminHomepage.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back</a>
+        <h2>Order Management</h2>
+      </div>
+    </div>
+
+    <table id="order-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Items</th>
+          <th>Total (Rs.)</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="order-list">
+        <!-- Orders injected here -->
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) window.location.href = "../1.loginpage.html";
+
+    async function loadOrders() {
+      try {
+        const res = await fetch("/api/admin/orders", {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await res.json();
+        
+        const tbody = document.getElementById("order-list");
+        tbody.innerHTML = "";
+        
+        if (data.success && data.orders) {
+          data.orders.forEach(o => {
+            const date = new Date(o.createdAt).toLocaleString();
+            let itemsList = o.items.map(i => `${i.productId?.name || 'Unknown'} (x${i.quantity})`).join('<br>');
+            
+            tbody.innerHTML += `
+              <tr>
+                <td style="font-size: 12px; color: #555;">#${o._id}</td>
+                <td>
+                  <strong>${o.shippingAddress?.fullName || 'N/A'}</strong><br>
+                  <small>${o.userId?.contact || 'N/A'}</small>
+                </td>
+                <td>${date}</td>
+                <td style="font-size: 13px;">${itemsList}</td>
+                <td><strong>Rs. ${o.totalAmount.toFixed(2)}</strong></td>
+                <td><span style="background: #d1b4c3; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">${o.status}</span></td>
+              </tr>
+            `;
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load orders", err);
+      }
+    }
+    
+    function logout() { localStorage.removeItem("token"); window.location.href = "../1.loginpage.html"; }
+
+    loadOrders();
+  </script>
+</body>
+</html>

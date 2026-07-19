@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart | Jewelize</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="customerstyle.css">
+  <link rel="stylesheet" href="wishlist_cart.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <a href="../index.html">
+        <img src="../images/logo.png" alt="Jewelize Logo">
+      </a>
+    </div>
+
+    <nav class="main-nav">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="viewProduct.html?category=bracelets">Bracelets</a></li>
+        <li><a href="viewProduct.html?category=Cuff Bracelets">Cuff Bracelets</a></li>
+        <li><a href="viewProduct.html?category=earrings">Earrings</a></li>
+        <li><a href="viewProduct.html?category=necklaces">Necklaces</a></li>
+        <li><a href="viewProduct.html?category=rings">Rings</a></li>
+      </ul>
+    </nav>
+    <div class="header-icons">
+      <!-- Search toggle -->
+      <i class="fa-solid fa-magnifying-glass" onclick="toggleSearch()" style="cursor: pointer;"></i>
+      <a href="wishlist.html"><i class="fa-solid fa-heart"></i></a>
+      <!-- go up one folder to access login page -->
+      <a href="customerDashboard.html"><i class="fa-solid fa-user"></i></a>
+      <a href="cart.html"><i class="fa-solid fa-bag-shopping" style="color: #d1b4c3;"></i></a>
+    </div>
+    
+    <!-- Hidden search bar -->
+    <div id="search-bar-container" style="display: none; position: absolute; right: 70px; top: 75px; background: white; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); gap: 5px; z-index: 100;">
+      <input type="text" id="search-input" placeholder="Search products..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+      <button onclick="performSearch()" style="padding: 8px 15px; background: #d1b4c3; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Go</button>
+    </div>
+  </header>
+
+<section class="cart-page">
+  <h2>Your Shopping Cart 🛍️</h2>
+
+  <div class="cart-container">
+    <div id="cart-items-container"></div>
+
+    <div class="cart-summary">
+      <h3>Order Summary</h3>
+      <p>Subtotal: <strong>Rs. 210.00</strong></p>
+      <p>Delivery: Free</p>
+      <p>Total: <strong>Rs. 210.00</strong></p>
+      <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Jewelize | Anti-Tarnish Everyday Jewelry</p>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+  const cartContainer = document.getElementById("cart-items-container");
+
+  window.renderCart = function() {
+    cartContainer.innerHTML = ""; 
+
+    if (window.cart.length === 0) {
+      cartContainer.innerHTML = "<p>Your cart is empty! 😔</p>";
+      updateOrderSummary(0);
+      return;
+    }
+
+    let totalPrice = 0; 
+
+    window.cart.forEach((item, index) => {
+
+      totalPrice += (item.price * item.quantity);
+
+      cartContainer.innerHTML += `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="details">
+            <h3>${item.name}</h3>
+            <p>Rs. ${item.price.toFixed(2)} (Qty: ${item.quantity})</p>
+            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+          </div>
+        </div>
+      `;
+    });
+
+  
+    updateOrderSummary(totalPrice);
+  }
+
+  
+  function updateOrderSummary(total) {
+
+    const summaryBox = document.querySelector(".cart-summary");
+    
+    summaryBox.innerHTML = `
+      <h3>Order Summary</h3>
+      <p>Subtotal: <strong>Rs. ${total.toFixed(2)}</strong></p>
+      <p>Delivery: Free</p>
+      <p>Total: <strong>Rs. ${total.toFixed(2)}</strong></p>
+      <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+    `;
+  }
+
+ 
+  window.removeItem = function(index) {
+    window.cart.splice(index, 1);
+    localStorage.setItem("jewelize_cart", JSON.stringify(window.cart));
+    if (window.saveCartToBackend) window.saveCartToBackend();
+    window.renderCart();
+    if (window.updateCartCounter) window.updateCartCounter();
+  }
+
+  window.renderCart();
+</script>
+
+</body>
+</html>

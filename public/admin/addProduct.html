@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product - Jewelize Admin</title>
+  <link rel="stylesheet" href="adminstyle.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="adminHomepage.html">Jewelize Admin</a>
+    </div>
+  </header>
+
+  <div class="form-container">
+    <h2>Add New Product</h2>
+    <form id="addProductForm">
+      <input type="text" placeholder="Product Name" required>
+      <input type="number" placeholder="Price (₹)" required>
+      <select>
+        <option value="">Select Category</option>
+        <option value="rings">Rings</option>
+        <option value="necklaces">Necklaces</option>
+        <option value="earrings">Earrings</option>
+        <option value="bracelets">Bracelets</option>
+        <option value="cuffs">Cuff Bracelets</option>
+      </select>
+      <input type="number" placeholder="Stock Quantity" required>
+      <input type="file" accept="image/*" required>
+      <button type="submit">Add Product</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("addProductForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("✅ Product added successfully!");
+      window.location.href = "adminHomepage.html";
+    });
+  </script>
+</body>
+</html>

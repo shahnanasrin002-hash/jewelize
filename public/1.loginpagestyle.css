@@ -1,0 +1,90 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: url("images/bg.jpg") no-repeat center center/cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Logo */
+/* Logo */
+.logo img {
+  width: 280px;   /* increased size */
+  margin-bottom: 30px;
+}
+
+/* Login Card */
+.container {
+  background: #fffaf5;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 420px;   /* widened box */
+  text-align: center;
+}
+
+.container h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
+  color: #4B3832;
+}
+
+.container p {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 20px;
+  white-space: nowrap;   /* keep sentence in one line */
+}
+
+/* Input */
+.container input {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  outline: none;
+}
+
+.container input:focus {
+  border-color: #555;
+  box-shadow: 0 0 3px #aaa;
+}
+
+/* Button */
+.container button {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: bold;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.container button:hover {
+  background-color: #555;
+}
+
+/* Footer */
+.footer {
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.footer a {
+  color: #333;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
