@@ -146,3 +146,29 @@
 .status.delivered {
   color: green;
 }
+
+/* ========================
+   MOBILE RESPONSIVENESS
+======================== */
+@media (max-width: 768px) {
+  .product-list, .cart-container, .order-list, .checkout-form {
+    width: 95%;
+  }
+
+  .product-item, .cart-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .product-item img, .cart-item img {
+    width: 150px;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+  }
+}

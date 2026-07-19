@@ -88,3 +88,21 @@ body {
 .footer a:hover {
   text-decoration: underline;
 }
+
+/* ========================
+   MOBILE RESPONSIVENESS
+======================== */
+@media (max-width: 480px) {
+  .logo img {
+    width: 220px;
+  }
+  
+  .container {
+    width: 90%;
+    padding: 25px;
+  }
+  
+  .container p {
+    white-space: normal;
+  }
+}
