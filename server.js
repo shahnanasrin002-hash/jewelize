@@ -30,6 +30,9 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error("MongoDB connection error:", err));
 
 // Serve frontend files
+app.get('/', (req, res) => {
+  res.redirect('/1.loginpage.html');
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
