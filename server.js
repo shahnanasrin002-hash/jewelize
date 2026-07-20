@@ -11,6 +11,10 @@ const Product = require("./models/Product");
 const Order = require("./models/Order");
 const Admin = require("./models/Admin");
 const nodemailer = require("nodemailer");
+const sgMail = require('@sendgrid/mail');
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -44,20 +48,6 @@ function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-// Nodemailer setup
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // true for 465, false for other ports
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    rejectUnauthorized: false
-  }
-});
-
 // 1. Check Identifier API - returns the role
 app.post("/check-identifier", async (req, res) => {
   const { identifier } = req.body;
@@ -85,20 +75,21 @@ app.post("/check-identifier", async (req, res) => {
     console.log(`✅ OTP for ${identifier}: ${otp}`); // For testing/fallback
 
     // Try to send email if configured and identifier is an email
-    if (process.env.EMAIL_USER && process.env.EMAIL_USER !== 'your_gmail@gmail.com' && identifier.includes('@')) {
+    if (process.env.SENDGRID_API_KEY && identifier.includes('@')) {
       try {
-        await transporter.sendMail({
-          from: process.env.EMAIL_USER,
+        const msg = {
           to: identifier,
+          from: process.env.EMAIL_USER, // Must be your verified SendGrid sender email
           subject: 'Your Jewelize Verification Code',
           text: `Your One Time Password is: ${otp}. Welcome to Jewelize!`
-        });
-        console.log(`📧 Email successfully sent to ${identifier}`);
+        };
+        await sgMail.send(msg);
+        console.log(`📧 Email successfully sent to ${identifier} via SendGrid`);
       } catch (err) {
-        console.error("Failed to send email OTP:", err.message);
+        console.error("Failed to send email OTP via SendGrid:", err.response ? err.response.body : err.message);
       }
     } else {
-      console.log("⚠️ EMAIL_USER not configured or identifier is not an email. OTP printed to console only.");
+      console.log("⚠️ SENDGRID_API_KEY not configured or identifier is not an email. OTP printed to console only.");
     }
   }
   
